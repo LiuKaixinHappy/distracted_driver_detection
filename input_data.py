@@ -145,12 +145,13 @@ def img_augmentation(X_train, y_train):
             X_train[i] = tf.keras.preprocessing.image.random_rotation(X_train[i], 90)
     return X_train, y_train
 #%%
-def get_train_batch(X_train, y_train, batch_size, img_w, img_h, color_type):
+def get_train_batch(X_train, y_train, batch_size, img_w, img_h, color_type, is_augmentation=False):
     while 1:
         for i in range(0, len(X_train), batch_size):
             x = get_im_cv2(X_train[i:i+batch_size], img_w, img_h, color_type)
             y = y_train[i:i+batch_size]
-            x, y = img_augmentation(x, y)
+            if is_augmentation:
+                x, y = img_augmentation(x, y)
             yield({'input': x}, {'output': y})
     
 #%%
